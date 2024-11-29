@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nazatians Friends Unity Association</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .login-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .login-btn {
+            background-color: #deaa79;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .login-btn:hover {
+            background-color: #c78a57;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 300px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .close:hover {
+            color: #deaa79;
+        }
+
+        .info-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        .info-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            text-align: center;
+        }
+
+        .info-box h4 {
+            color: #deaa79;
+            margin-bottom: 15px;
+        }
+
+        #totalCollection {
+            font-size: 1.5em;
+            color: #deaa79;
+            font-weight: bold;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        table thead tr {
+            background-color: #deaa79;
+            color: #ffffff;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #ffe6a9;
+        }
+
+        @media screen and (max-width: 768px) {
+            table {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                padding: 10px;
+            }
+
+            h2, h3 {
+                font-size: 1.2em;
+                padding: 5px;
+            }
+
+            .info-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .info-box {
+                width: 90%;
+                margin: 10px auto;
+            }
+
+            .login-container {
+                position: relative;
+                text-align: right;
+                padding: 10px;
+                top: 0;
+                right: 0;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 30% auto;
+            }
+
+            form {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            form input, 
+            form select, 
+            form button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            #totalCollection {
+                font-size: 1.2em;
+            }
+        }
+
+        @viewport {
+            width: device-width;
+            zoom: 1.0;
+        }
+
+        button, 
+        input, 
+        select {
+            min-height: 44px;
+            margin: 5px 0;
+        }
+
+        @media screen and (max-width: 768px) {
+            th, td {
+                padding: 8px 4px;
+                font-size: 0.9em;
+            }
+
+            table th:nth-child(1),
+            table td:nth-child(1),
+            table th:nth-child(2),
+            table td:nth-child(2) {
+                position: sticky;
+                left: 0;
+                background: white;
+                z-index: 1;
+            }
+
+            table td:nth-child(2) {
+                border-right: 2px solid #deaa79;
+            }
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container img {
+            max-width: 150px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 20px;">
+        <img src="https://i.ibb.co.com/WFkY2ff/a-creative-and-inspiring-logo-design-featuring-a-s-U93-XQD8y-SKa2a-Hmueuiffw-y-Bga-Dn-L6-QXCNqz-UCur.png" 
+             alt="NFUA Logo" 
+             style="max-width: 150px; border-radius: 10px; margin: 10px auto;">
+    </div>
+
+    <div class="login-container">
+        <button class="login-btn" onclick="showLoginModal()">Admin Login</button>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h3>Admin Login</h3>
+            <input type="password" id="adminPassword" placeholder="Enter Password" style="margin: 10px; padding: 5px;">
+            <button onclick="checkPassword()" class="login-btn">Login</button>
+        </div>
+    </div>
+
+    <h1>Nazatians Friends Unity Association</h1>
+    <h3>Sarulia, Demra, Dhaka 1361</h3>
+    <h2>Monthly Payment Details</h2>
+
+    <div class="info-container">
+        <div class="info-box">
+            <h4>Arabic Calendar</h4>
+            <div id="currentDate"></div>
+        </div>
+        <div class="info-box">
+            <h4>Total Collection</h4>
+            <div id="totalCollection">৳ 0</div>
+        </div>
+    </div>
+
+    <table id="table">
+        <caption>Monthly Contributions for Each Member 1446 Hijri</caption>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Romjan</th>
+                <th>Shawal</th>
+                <th>Jil Qad</th>
+                <th>Jil Hazz</th>
+                <th>Muharrom</th>
+                <th>Sofor</th>
+                <th>Robiul Awwal</th>
+                <th>Robius Sani</th>
+                <th>Jomadal Ula</th>
+                <th>Jomadal Akhiro</th>
+                <th>Rojob</th>
+                <th>Saban</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center">101</td>
+                <td align="center">Zunayed Al Mahmud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">102</td>
+                <td align="center">Hasan Masud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">103</td>
+                <td align="center">Abdullah Afif</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">104</td>
+                <td align="center">Abdullah Al Mahi</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">105</td>
+                <td align="center">Imtiaz Hasan</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">106</td>
+                <td align="center">Sah Poran</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">107</td>
+                <td align="center">Alamin</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">108</td>
+                <td align="center">Bayzid</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">109</td>
+                <td align="center">Saim Rafi</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">110</td>
+                <td align="center">Anas Mahmud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">111</td>
+                <td align="center">Mahmud Bin Nur</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">112</td>
+                <td align="center">Nabil Mahmud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">113</td>
+                <td align="center">Abdur Rahman</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">114</td>
+                <td align="center">Tawkir Rahman</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">115</td>
+                <td align="center">Abdullah Al Kafi</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+         
+        </tbody>
+    </table>
+
+    <script>
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === '4908503') {
+                window.location.href = 'admin_panel.html';
+            } else {
+                alert('Invalid password!');
+            }
+        }
+
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('loginModal')) {
+                closeLoginModal();
+            }   
+        }
+
+        function updateTableDisplay(data) {
+            const table = document.getElementById("table");
+            data.forEach((rowData, index) => {
+                const row = table.rows[index + 1];
+                if (row) {
+                    Object.entries(rowData.payments).forEach(([month, value]) => {
+                        const monthIndex = Array.from(table.rows[0].cells)
+                            .findIndex(cell => cell.innerText === month);
+                        if (monthIndex !== -1) {
+                            row.cells[monthIndex].innerText = value;
+                        }
+                    });
+                }
+            });
+
+            let total = 0;
+            data.forEach(row => {
+                Object.values(row.payments).forEach(value => {
+                    if (value && !isNaN(value)) {
+                        total += parseInt(value);
+                    }
+                });
+            });
+            document.getElementById('totalCollection').innerText = `৳ ${total}`;
+        }
+
+        function updateArabicDate() {
+            const arabicMonths = {
+                0: 'Muharrom', 1: 'Sofor', 2: 'Robiul Awwal',
+                3: 'Robius Sani', 4: 'Jomadal Ula', 5: 'Jomadal Akhiro',
+                6: 'Rojob', 7: 'Saban', 8: 'Romjan',
+                9: 'Shawal', 10: 'Jil Qad', 11: 'Jil Hazz'
+            };
+
+            const today = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            };
+
+            const dateStr = today.toLocaleDateString('ar-SA', options);
+            const currentMonth = arabicMonths[today.getMonth()];
+
+            document.getElementById("currentDate").innerHTML = `
+                <div>${currentMonth}</div>
+                <div>${dateStr}</div>
+            `;
+        }
+
+        function loadFromFirebase() {
+            database.ref('tableData').on('value', (snapshot) => {
+                try {
+                    const tableData = snapshot.val();
+                    if (tableData) {
+                        const table = document.getElementById("table");
+                        if (!table) {
+                            throw new Error("Table element not found");
+                        }
+
+                        let total = 0;
+                        const dataArray = Object.values(tableData);
+
+                        // Clear existing data first
+                        for (let i = 1; i < table.rows.length; i++) {
+                            const row = table.rows[i];
+                            for (let j = 2; j < row.cells.length; j++) {
+                                row.cells[j].innerText = '';
+                            }
+                        }
+
+                        // Update with new data
+                        dataArray.forEach((rowData) => {
+                            if (rowData && rowData.id) {
+                                const rowIndex = Array.from(table.rows).findIndex(
+                                    row => row.cells[0]?.innerText === rowData.id
+                                );
+
+                                if (rowIndex > 0) {
+                                    const row = table.rows[rowIndex];
+                                    if (rowData.payments) {
+                                        Object.entries(rowData.payments).forEach(([month, value]) => {
+                                            const monthIndex = Array.from(table.rows[0].cells)
+                                                .findIndex(cell => cell.innerText === month);
+                                            if (monthIndex !== -1) {
+                                                row.cells[monthIndex].innerText = value || '';
+                                                if (value && !isNaN(value)) {
+                                                    total += parseInt(value);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+
+                        // Update total collection
+                        const totalElement = document.getElementById('totalCollection');
+                        if (totalElement) {
+                            totalElement.innerText = `৳ ${total}`;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error processing data:", error);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromFirebase();
+            updateArabicDate();
+        });
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5S4DiTfTfcXDe0DxFEZQDr-OxE6rW3MA",
+            authDomain: "nfua-updated.firebaseapp.com",
+            databaseURL: "https://nfua-updated-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "nfua-updated",
+            storageBucket: "nfua-updated.firebasestorage.app",
+            messagingSenderId: "708701107886",
+            appId: "1:708701107886:web:7245d0aac4ed6c408a1f3f",
+            measurementId: "G-3BCYZ9FP2F"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        database.ref('.info/connected').on('value', (snap) => {
+            if (snap.val() === true) {
+                console.log('Connected to Firebase ✅');
+            } else {
+                console.log('Disconnected from Firebase ❌');
+            }
+        });
+
+        database.ref().on('value', (snapshot) => {
+            console.log('Data retrieved successfully');
+        }, (error) => {
+            console.error('Database error:', error);
+        });
+
+        const connectedRef = database.ref(".info/connected");
+        connectedRef.on("value", (snap) => {
+            if (snap.val() === true) {
+                console.log("Connected to Firebase ✅");
+                database.ref("test").set({
+                    timestamp: Date.now(),
+                    status: "online"
+                }).then(() => {
+                    console.log("Test write successful");
+                }).catch((error) => {
+                    console.error("Test write failed:", error);
+                });
+            } else {
+                console.log("Disconnected from Firebase ❌");
+            }
+        });
+    </script>
+</body>
+</html>

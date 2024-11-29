@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel - Nazatians Friends Unity Association</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        table thead tr {
+            background-color: #deaa79;
+            color: #ffffff;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #ffe6a9;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        caption {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        form .calendar,
+        form .total {
+            flex: 1;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        form .calendar h4, .total h4 {
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            color: #deaa79;
+        }
+
+        .calendar {
+            font-size: 1.2em;
+            line-height: 1.5;
+        }
+
+        form input, form select, form button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #deaa79;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #c78a57;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 10px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .undo {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #ff6666;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .undo:hover {
+            background-color: #e64c4c;
+        }
+
+        #totalCollection {
+            font-size: 1.5em;
+            color: #deaa79;
+            font-weight: bold;
+        }
+
+        .home-btn {
+            background-color: #deaa79;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .home-btn:hover {
+            background-color: #c78a57;
+        }
+
+        @media screen and (max-width: 768px) {
+            .home-btn {
+                position: relative;
+                margin: 10px;
+                display: inline-block;
+            }
+        }
+
+        .receipt {
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .receipt p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        @media print {
+            .receipt {
+                width: 80mm;
+                padding: 5mm;
+            }
+        }
+
+        #whatsappModal input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .modal-content button {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .receipt {
+            width: 300px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        .receipt p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        #whatsappModal input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #whatsappModal .modal-content {
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 20px; left: 20px;">
+        <button onclick="window.location.href='index.html'" 
+                style="background-color: #deaa79; 
+                       color: white; 
+                       padding: 10px 20px; 
+                       border: none; 
+                       border-radius: 5px; 
+                       cursor: pointer; 
+                       font-size: 1em;">
+            ← Home Page
+        </button>
+    </div>
+    <h1>Nazatians Friends Unity Association</h1>
+    <h3>Sarulia, Demra, Dhaka 1361</h3>
+    <h2>Monthly Payment Details</h2>
+    <form id="updateForm">
+        <div class="calendar" id="calendar">
+            <h4>Arabic Calendar</h4>
+            <div id="currentDate"></div>
+        </div>
+        <div>
+            <div class="tooltip">
+                <input type="number" id="id" placeholder="Enter ID" title="Enter the member's ID">
+                <span class="tooltip-text">Enter the unique ID of the member.</span>
+            </div>
+            <div class="tooltip">
+                <select id="month" title="Select the payment month">
+                    <option value="">Select Month</option>
+                    <option value="Romjan">Romjan</option>
+                    <option value="Shawal">Shawal</option>
+                    <option value="Jil Qad">Jil Qad</option>
+                    <option value="Jil Hazz">Jil Hazz</option>
+                    <option value="Muharrom">Muharrom</option>
+                    <option value="Sofor">Sofor</option>
+                    <option value="Robiul Awwal">Robiul Awwal</option>
+                    <option value="Robius Sani">Robius Sani</option>
+                    <option value="Jomadal Ula">Jomadal Ula</option>
+                    <option value="Jomadal Akhiro">Jomadal Akhiro</option>
+                    <option value="Rojob">Rojob</option>
+                    <option value="Saban">Saban</option>
+                </select>
+            </div>
+            <div class="tooltip">
+                <input type="number" id="value" placeholder="Enter Value" title="Enter the payment amount">
+                <span class="tooltip-text">Enter the payment amount for the selected month.</span>
+            </div>
+            <div class="tooltip" style="display: flex; align-items: center; margin: 10px 0;">
+                <input type="checkbox" id="sendReceipt" style="width: auto; margin-right: 10px;">
+                <label for="sendReceipt">Send WhatsApp Receipt</label>
+                <span class="tooltip-text">Check this to send receipt via WhatsApp after payment</span>
+            </div>
+            <button type="button" onclick="updateCell()">Submit</button>
+        </div>
+        <div class="total">
+            <h4>Total Collection</h4>
+            <div id="totalCollection">৳ 0</div>
+        </div>
+    </form>
+    <div class="message" id="message"></div>
+    <div class="undo" id="undo" style="display: none;" onclick="undoLast()">Undo Last Action</div>
+    <table id="table">
+        <caption>Monthly Contributions for Each Member 1446 Hijri </caption>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Romjan</th>
+                <th>Shawal</th>
+                <th>Jil Qad</th>
+                <th>Jil Hazz</th>
+                <th>Muharrom</th>
+                <th>Sofor</th>
+                <th>Robiul Awwal</th>
+                <th>Robius Sani</th>
+                <th>Jomadal Ula</th>
+                <th>Jomadal Akhiro</th>
+                <th>Rojob</th>
+                <th>Saban</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td align="center">101</td>
+                <td align="center">Zunayed Al Mahmud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">102</td>
+                <td align="center">Hasan Masud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">103</td>
+                <td align="center">Abdullah Afif</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">104</td>
+                <td align="center">Abdullah Al Mahi</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">105</td>
+                <td align="center">Imtiaz Hasan</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">106</td>
+                <td align="center">Sah Poran</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">107</td>
+                <td align="center">Alamin</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">108</td>
+                <td align="center">Bayzid</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">109</td>
+                <td align="center">Saim Rafi</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">110</td>
+                <td align="center">Anas Mahmud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">111</td>
+                <td align="center">Mahmud Bin Nur</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">112</td>
+                <td align="center">Nabil Mahmud</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">113</td>
+                <td align="center">Abdur Rahman</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">114</td>
+                <td align="center">Tawkir Rahman</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+            <tr>
+                <td align="center">115</td>
+                <td align="center">Abdullah Al Kafi</td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+                <td align="center"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="text-align: center; margin: 20px;">
+        <div style="max-width: 700px; margin: 0 auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3>Receipt Verification</h3>
+            <div style="display: flex; gap: 10px; justify-content: center; margin: 20px 0;">
+                <input type="text" id="receiptId" placeholder="Enter Receipt Number" style="padding: 10px; width: 300px; border: 1px solid #ddd; border-radius: 5px;">
+                <button onclick="checkReceipt()" style="background-color: #deaa79; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                    Verify Receipt
+                </button>
+            </div>
+            <div id="verificationResult" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;">
+            </div>
+        </div>
+
+        <div style="max-width: 700px; margin: 20px auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3>Recent Payments</h3>
+            <div id="recentPayments" style="margin-top: 20px;">
+                <!-- Recent payments will be loaded here -->
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center; margin: 20px;">
+        <button onclick="downloadTableAsImage()" style="background-color: #deaa79; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
+            Download The Image of Table
+        </button>
+    </div>
+    <div id="receiptTemplate" style="display: none;">
+        <div class="receipt">
+            <img src="https://i.ibb.co.com/WFkY2ff/a-creative-and-inspiring-logo-design-featuring-a-s-U93-XQD8y-SKa2a-Hmueuiffw-y-Bga-Dn-L6-QXCNqz-UCur.png" 
+                 alt="NFUA Logo" 
+                 style="width: 80px; margin: 0 auto; display: block;">
+            <h3 style="text-align: center; margin: 10px 0;">Payment Receipt</h3>
+            <div style="margin: 15px 0;">
+                <p><strong>ID:</strong> <span id="receipt-id"></span></p>
+                <p><strong>Name:</strong> <span id="receipt-name"></span></p>
+                <p><strong>Month:</strong> <span id="receipt-month"></span></p>
+                <p><strong>Amount:</strong> ৳<span id="receipt-amount"></span></p>
+                <p><strong>Date:</strong> <span id="receipt-date"></span></p>
+            </div>
+            <div style="text-align: center; font-size: 12px; margin-top: 20px;">
+                Nazatians Friends Unity Association<br>
+                Sarulia, Demra, Dhaka 1361
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center; margin: 20px;">
+        <button onclick="clearAllData()" 
+                style="background-color: #ff6666; 
+                       color: white; 
+                       padding: 10px 20px; 
+                       border: none; 
+                       border-radius: 5px; 
+                       cursor: pointer;">
+            Clear All Payment Data
+        </button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="whatsapp_numbers.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5S4DiTfTfcXDe0DxFEZQDr-OxE6rW3MA",
+            authDomain: "nfua-updated.firebaseapp.com",
+            projectId: "nfua-updated",
+            storageBucket: "nfua-updated.firebasestorage.app",
+            messagingSenderId: "708701107886",
+            appId: "1:708701107886:web:7245d0aac4ed6c408a1f3f",
+            measurementId: "G-3BCYZ9FP2F",
+            databaseURL: "https://nfua-updated-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        database.ref('.info/connected').on('value', (snap) => {
+            if (snap.val() === true) {
+                console.log('Connected to Firebase ✅');
+            } else {
+                console.log('Disconnected from Firebase ❌');
+            }
+        });
+        database.ref().on('value', (snapshot) => {
+            console.log('Data retrieved successfully');
+        }, (error) => {
+            console.error('Database error:', error);
+        });
+        function saveToFirebase() {
+            const table = document.getElementById("table");
+            const tableData = {};
+            
+            for (let i = 1; i < table.rows.length; i++) {
+                const row = table.rows[i];
+                const id = row.cells[0].innerText;
+                
+                if (id) {
+                    tableData[id] = {
+                        id: id,
+                        name: row.cells[1].innerText,
+                        payments: {}
+                    };
+                    
+                    for (let j = 2; j < row.cells.length; j++) {
+                        const monthName = table.rows[0].cells[j].innerText;
+                        const value = row.cells[j].innerText.trim();
+                        tableData[id].payments[monthName] = value;
+                    }
+                }
+            }
+
+            return database.ref('tableData').set(tableData)
+                .then(() => {
+                    console.log("Data saved successfully:", tableData);
+                    document.getElementById("message").innerText = "ডেটা সফলভাবে সেভ হযেছে!";
+                })
+                .catch((error) => {
+                    console.error("Error saving data:", error);
+                    alert("ডেটা সেভ করতে সমস্যা হয়েছে!");
+                    throw error;
+                });
+        }
+        function loadFromFirebase() {
+            const loadingIndicator = document.getElementById('loading');
+            if (loadingIndicator) loadingIndicator.style.display = 'block';
+            
+            database.ref('tableData').on('value', (snapshot) => {
+                try {
+                    const tableData = snapshot.val();
+                    const table = document.getElementById("table");
+                    
+                    if (!table) {
+                        console.error("Table element not found");
+                        return;
+                    }
+
+                    if (tableData) {
+                        const dataArray = Object.values(tableData);
+                        
+                        dataArray.forEach((rowData) => {
+                            if (rowData && rowData.id) {
+                                const row = Array.from(table.rows).find(
+                                    row => row.cells[0]?.innerText === rowData.id
+                                );
+                                
+                                if (row) {
+                                    if (rowData.payments) {
+                                        Object.entries(rowData.payments).forEach(([month, value]) => {
+                                            const monthIndex = Array.from(table.rows[0].cells)
+                                                .findIndex(cell => cell.innerText === month);
+                                            if (monthIndex !== -1) {
+                                                row.cells[monthIndex].innerText = value || '';
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                        
+                        updateTotalCollection();
+                    }
+                } catch (error) {
+                    console.error("Error processing data:", error);
+                    // Don't show alert on initial load
+                    if (error.message !== "Table element not found") {
+                        alert("Error loading data. Please refresh the page.");
+                    }
+                } finally {
+                    if (loadingIndicator) loadingIndicator.style.display = 'none';
+                }
+            }, (error) => {
+                console.error("Firebase error:", error);
+                alert("Connection error. Please check your internet connection.");
+            });
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromFirebase();
+            updateArabicDate();
+            loadRecentPayments();
+        });
+        async function updateCell() {
+            const id = document.getElementById("id").value;
+            const month = document.getElementById("month").value;
+            const value = document.getElementById("value").value;
+            const shouldSendReceipt = document.getElementById("sendReceipt").checked;
+            
+            if (!id || !month || !value) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            try {
+                // Generate a unique receipt ID with timestamp and random number
+                const timestamp = Date.now();
+                const random = Math.floor(Math.random() * 1000);
+                const receiptId = `NFUA-${id}-${timestamp}-${random}`;
+
+                // Update table and save to Firebase
+                const table = document.getElementById("table");
+                const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
+                if (row) {
+                    const monthIndex = Array.from(table.rows[0].cells)
+                        .findIndex(cell => cell.innerText === month);
+                    if (monthIndex !== -1) {
+                        row.cells[monthIndex].innerText = value;
+                    }
+                }
+
+                // Save payment data
+                await saveToFirebase();
+                
+                const memberName = row.cells[1].innerText;
+                const date = new Date().toLocaleDateString();
+
+                // Save receipt data to Firebase
+                await database.ref(`receipts/${receiptId}`).set({
+                    memberId: id,
+                    memberName: memberName,
+                    month: month,
+                    amount: value,
+                    date: date,
+                    timestamp: timestamp,
+                    receiptId: receiptId
+                });
+
+                // Show success message
+                document.getElementById("message").innerText = "Update successful!";
+                updateTotalCollection();
+
+                // Send WhatsApp receipt if checked
+                if (shouldSendReceipt) {
+                    const number = membersWhatsApp[id];
+                    if (number) {
+                        const text = 
+`🧾 *NFUA Payment Receipt*
+
+*Member Details:*
+━━━━━━━━━━━━
+👤 Name: ${memberName}
+🆔 ID: ${id}
+📅 Month: ${month}
+💰 Amount: ৳${value}
+📆 Date: ${date}
+🔖 Receipt No: ${receiptId}
+━━━━━━━━━━━━
+
+To verify this receipt, contact admin with the Receipt No.
+
+*Nazatians Friends Unity Association*
+Sarulia, Demra, Dhaka`;
+
+                        const whatsappUrl = `https://wa.me/${number.replace(/\+/g, '')}?text=${encodeURIComponent(text)}`;
+                        window.open(whatsappUrl);
+                    }
+                }
+
+                // Clear input fields
+                document.getElementById("id").value = "";
+                document.getElementById("month").value = "";
+                document.getElementById("value").value = "";
+                document.getElementById("sendReceipt").checked = false;
+
+            } catch (error) {
+                console.error("Error updating data:", error);
+                alert("Update failed! Please try again.");
+            }
+        }
+        async function undoLast() {
+            if (lastAction) {
+                try {
+                    const { id, month, oldValue } = lastAction;
+                    
+                    // Get current data
+                    const snapshot = await database.ref('tableData').once('value');
+                    const currentData = snapshot.val();
+                    
+                    if (currentData && currentData[id]) {
+                        // Update with old value or remove if it was empty
+                        if (oldValue) {
+                            currentData[id].payments[month] = oldValue;
+                        } else {
+                            delete currentData[id].payments[month];
+                        }
+                        
+                        // Save back to Firebase
+                        await database.ref('tableData').set(currentData);
+                        
+                        // Update table display
+                        const table = document.getElementById("table");
+                        const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
+                        if (row) {
+                            const monthIndex = Array.from(table.rows[0].cells)
+                                .findIndex(cell => cell.innerText === month);
+                            if (monthIndex !== -1) {
+                                row.cells[monthIndex].innerText = oldValue || '';
+                            }
+                        }
+                        
+                        document.getElementById("message").innerText = "পূর্ববর্তী অবস্থায় ফিরে গেছে!";
+                        document.getElementById("undo").style.display = "none";
+                        lastAction = null;
+                        updateTotalCollection();
+                    }
+                } catch (error) {
+                    console.error("Error undoing action:", error);
+                    alert("পূর্ববর্তী অবস্থায় ফিরতে সমস্যা হয়েছে!");
+                }
+            }
+        }
+        function updateTotalCollection() {
+            const table = document.getElementById("table");
+            let total = 0;
+            for (let i = 1; i < table.rows.length; i++) {
+                for (let j = 2; j < table.rows[i].cells.length; j++) {
+                    const cellValue = table.rows[i].cells[j].innerText;
+                    if (!isNaN(cellValue) && cellValue !== "") {
+                        total += parseInt(cellValue);
+                    }
+                }
+            }
+            document.getElementById('totalCollection').innerText = `৳ ${total}`;
+        }
+        function updateArabicDate() {
+            const arabicMonths = {
+                0: 'Muharrom', 
+                1: 'Sofor', 
+                2: 'Robiul Awwal',
+                3: 'Robius Sani', 
+                4: 'Jomadal Ula', 
+                5: 'Jomadal Akhiro',
+                6: 'Rojob', 
+                7: 'Saban', 
+                8: 'Romjan',
+                9: 'Shawal', 
+                10: 'Jil Qad', 
+                11: 'Jil Hazz'
+            };
+            const today = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            };
+            const dateStr = today.toLocaleDateString('ar-SA', options);
+            const currentMonth = arabicMonths[today.getMonth()];
+            document.getElementById("currentDate").innerHTML = `
+                <div>${currentMonth}</div>
+                <div>${dateStr}</div>
+            `;
+        }
+        function downloadTableAsImage() {
+            const table = document.getElementById('table');
+            const message = document.getElementById("message");
+            message.innerText = "ছবি তৈরি হচ্ছে...";
+            html2canvas(table, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: true
+            }).then(function(canvas) {
+                const image = canvas.toDataURL("image/jpeg", 1.0);
+                const downloadLink = document.createElement('a');
+                downloadLink.href = image;
+                const date = new Date();
+                const filename = `NFUA_Table_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.jpg`;
+                downloadLink.download = filename;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                message.innerText = "ছবি ডাউনলোড হয়েছে!";
+                setTimeout(() => {
+                    message.innerText = "";
+                }, 3000);
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                message.innerText = "ছবি তৈরি করতে সমস্যা হয়েছে!";
+            });
+        }
+        // Add this function to verify a receipt
+        async function verifyReceipt(receiptId) {
+            try {
+                const snapshot = await database.ref(`receipts/${receiptId}`).once('value');
+                const receipt = snapshot.val();
+                if (receipt) {
+                    return `✅ Valid Receipt\n\nDetails:\nID: ${receipt.memberId}\nName: ${receipt.memberName}\nMonth: ${receipt.month}\nAmount: ৳${receipt.amount}\nDate: ${receipt.date}`;
+                }
+                return "❌ Invalid Receipt";
+            } catch (error) {
+                console.error("Error verifying receipt:", error);
+                return "Error verifying receipt";
+            }
+        }
+        async function checkReceipt() {
+            const receiptId = document.getElementById('receiptId').value;
+            if (!receiptId) {
+                alert('Please enter a receipt number');
+                return;
+            }
+
+            const resultDiv = document.getElementById('verificationResult');
+            try {
+                const snapshot = await database.ref(`receipts/${receiptId}`).once('value');
+                const receipt = snapshot.val();
+                
+                if (receipt) {
+                    resultDiv.style.backgroundColor = '#e8f5e9';
+                    resultDiv.innerHTML = `
+                        <h4 style="color: #2e7d32; margin: 0;">✅ Valid Receipt</h4>
+                        <div style="margin-top: 10px;">
+                            <p><strong>Receipt ID:</strong> ${receipt.receiptId}</p>
+                            <p><strong>Member ID:</strong> ${receipt.memberId}</p>
+                            <p><strong>Name:</strong> ${receipt.memberName}</p>
+                            <p><strong>Month:</strong> ${receipt.month}</p>
+                            <p><strong>Amount:</strong> ৳${receipt.amount}</p>
+                            <p><strong>Date:</strong> ${receipt.date}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.style.backgroundColor = '#ffebee';
+                    resultDiv.innerHTML = `
+                        <h4 style="color: #c62828; margin: 0;">❌ Invalid Receipt</h4>
+                        <p style="margin-top: 10px;">This receipt number was not found in our records.</p>
+                    `;
+                }
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                console.error('Error verifying receipt:', error);
+                resultDiv.style.backgroundColor = '#ffebee';
+                resultDiv.innerHTML = `
+                    <h4 style="color: #c62828; margin: 0;">❌ Error</h4>
+                    <p style="margin-top: 10px;">An error occurred while verifying the receipt. Please try again.</p>
+                `;
+                resultDiv.style.display = 'block';
+            }
+        }
+
+        function loadRecentPayments() {
+            const recentPaymentsDiv = document.getElementById('recentPayments');
+            database.ref('receipts').orderByChild('timestamp').limitToLast(5).on('value', (snapshot) => {
+                const payments = [];
+                snapshot.forEach((childSnapshot) => {
+                    payments.unshift(childSnapshot.val());
+                });
+                
+                recentPaymentsDiv.innerHTML = payments.map(payment => `
+                    <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; background: #f9f9f9;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${payment.memberName}</strong> (ID: ${payment.memberId})
+                                <br>
+                                Month: ${payment.month} | Amount: ৳${payment.amount}
+                            </div>
+                            <div style="text-align: right; color: #666; font-size: 0.9em;">
+                                ${payment.date}
+                                <br>
+                                <span style="font-size: 0.8em; color: #888;">${payment.receiptId}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+        function clearAllData() {
+            const confirmClear = confirm("⚠️ Warning: This will delete ALL payment data and receipts. This action cannot be undone. Are you sure?");
+            if (confirmClear) {
+                const secondConfirm = confirm("Are you absolutely sure? All payment records will be permanently deleted.");
+                if (secondConfirm) {
+                    try {
+                        // Clear tableData
+                        database.ref('tableData').remove();
+                        // Clear receipts
+                        database.ref('receipts').remove();
+                        
+                        // Clear table cells
+                        const table = document.getElementById("table");
+                        for (let i = 1; i < table.rows.length; i++) {
+                            const row = table.rows[i];
+                            for (let j = 2; j < row.cells.length; j++) {
+                                row.cells[j].innerText = '';
+                            }
+                        }
+                        
+                        // Update total
+                        document.getElementById('totalCollection').innerText = '৳ 0';
+                        
+                        alert("All payment data has been cleared successfully!");
+                        
+                        // Clear recent payments display
+                        document.getElementById('recentPayments').innerHTML = '';
+                        
+                    } catch (error) {
+                        console.error("Error clearing data:", error);
+                        alert("Error clearing data. Please try again.");
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
