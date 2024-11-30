@@ -76,19 +76,33 @@
             background-color: #f9f9f9;
             border-radius: 5px;
             margin: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             text-align: center;
+            min-width: 250px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        form .calendar h4, .total h4 {
+        form .calendar h4, 
+        form .total h4 {
             margin-bottom: 15px;
             font-size: 1.4em;
             color: #deaa79;
         }
 
-        .calendar {
+        #currentDate,
+        #totalCollection {
             font-size: 1.2em;
             line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        #totalCollection {
+            color: #deaa79;
+            font-weight: bold;
         }
 
         form input, form select, form button {
@@ -160,12 +174,6 @@
 
         .undo:hover {
             background-color: #e64c4c;
-        }
-
-        #totalCollection {
-            font-size: 1.5em;
-            color: #deaa79;
-            font-weight: bold;
         }
 
         .home-btn {
@@ -247,6 +255,39 @@
 
         #whatsappModal .modal-content {
             max-width: 300px;
+        }
+
+        form select option:disabled {
+            background-color: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        form select {
+            cursor: pointer;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        @media screen and (max-width: 480px) {
+            input, button {
+                font-size: 16px !important; /* Prevents zoom on mobile */
+                padding: 12px !important;
+            }
+            
+            h3 {
+                font-size: 18px !important;
+            }
+            
+            .tab-panel {
+                padding: 12px !important;
+            }
         }
     </style>
 </head>
@@ -574,30 +615,150 @@
             </tr>
         </tbody>
     </table>
-    <div style="text-align: center; margin: 20px;">
-        <div style="max-width: 700px; margin: 0 auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h3>Receipt Verification</h3>
-            <div style="display: flex; gap: 10px; justify-content: center; margin: 20px 0;">
-                <input type="text" id="receiptId" placeholder="Enter Receipt Number" style="padding: 10px; width: 300px; border: 1px solid #ddd; border-radius: 5px;">
-                <button onclick="checkReceipt()" style="background-color: #deaa79; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-                    Verify Receipt
-                </button>
-            </div>
-            <div id="verificationResult" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none;">
-            </div>
+    <div style="max-width: 1000px; margin: 20px auto; padding: 0 15px;">
+        <!-- Mobile-friendly Tab Buttons -->
+        <div style="display: flex; 
+                    flex-wrap: nowrap; 
+                    gap: 5px; 
+                    margin-bottom: 20px; 
+                    overflow-x: auto; 
+                    -webkit-overflow-scrolling: touch; 
+                    padding: 5px 0;
+                    scrollbar-width: none;" 
+             class="hide-scrollbar">
+            <button onclick="showTab('receipts')" id="receiptsTab" 
+                    style="background-color: #deaa79; 
+                           color: white; 
+                           padding: 12px 15px; 
+                           border: none; 
+                           border-radius: 5px; 
+                           cursor: pointer; 
+                           white-space: nowrap;
+                           flex: 1;
+                           min-width: 120px;
+                           font-size: 14px;">
+                🧾 Verify Receipt
+            </button>
+            <button onclick="showTab('actions')" id="actionsTab"
+                    style="background-color: #deaa79; 
+                           color: white; 
+                           padding: 12px 15px; 
+                           border: none; 
+                           border-radius: 5px; 
+                           cursor: pointer; 
+                           white-space: nowrap;
+                           flex: 1;
+                           min-width: 120px;
+                           font-size: 14px;">
+                ⚡ Actions
+            </button>
+            <button onclick="showTab('recent')" id="recentTab"
+                    style="background-color: #deaa79; 
+                           color: white; 
+                           padding: 12px 15px; 
+                           border: none; 
+                           border-radius: 5px; 
+                           cursor: pointer; 
+                           white-space: nowrap;
+                           flex: 1;
+                           min-width: 120px;
+                           font-size: 14px;">
+                📋 Recent
+            </button>
         </div>
 
-        <div style="max-width: 700px; margin: 20px auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h3>Recent Payments</h3>
-            <div id="recentPayments" style="margin-top: 20px;">
-                <!-- Recent payments will be loaded here -->
+        <!-- Mobile-friendly Tab Content -->
+        <div class="tab-content">
+            <!-- Receipt Verification Panel -->
+            <div id="receiptsPanel" class="tab-panel" 
+                 style="background: white; 
+                        padding: 15px; 
+                        border-radius: 10px; 
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+                        display: none;
+                        margin-bottom: 15px;">
+                <h3 style="color: #deaa79; margin-bottom: 15px; font-size: 18px;">Receipt Verification</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="text" id="receiptId" 
+                           placeholder="Enter Receipt Number" 
+                           style="padding: 12px; 
+                                  border: 1px solid #ddd; 
+                                  border-radius: 5px;
+                                  font-size: 16px;">
+                    <button onclick="checkReceipt()" 
+                            style="background-color: #deaa79; 
+                                   color: white; 
+                                   padding: 12px; 
+                                   border: none; 
+                                   border-radius: 5px; 
+                                   cursor: pointer;
+                                   font-size: 16px;">
+                        Verify Receipt
+                    </button>
+                </div>
+                <div id="verificationResult" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+            </div>
+
+            <!-- Admin Actions Panel -->
+            <div id="actionsPanel" class="tab-panel" 
+                 style="background: white; 
+                        padding: 15px; 
+                        border-radius: 10px; 
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+                        display: none;
+                        margin-bottom: 15px;">
+                <h3 style="color: #deaa79; margin-bottom: 15px; font-size: 18px;">Admin Actions</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button onclick="sendDueReminders()" 
+                            style="background-color: #4CAF50; 
+                                   color: white; 
+                                   padding: 15px; 
+                                   border: none; 
+                                   border-radius: 5px; 
+                                   cursor: pointer;
+                                   font-size: 16px;">
+                        📢 Send Due Reminders
+                    </button>
+                    <button onclick="downloadTableAsImage()" 
+                            style="background-color: #2196F3; 
+                                   color: white; 
+                                   padding: 15px; 
+                                   border: none; 
+                                   border-radius: 5px; 
+                                   cursor: pointer;
+                                   font-size: 16px;">
+                        📥 Download Table Image
+                    </button>
+                    <button onclick="clearAllData()" 
+                            style="background-color: #ff6666; 
+                                   color: white; 
+                                   padding: 15px; 
+                                   border: none; 
+                                   border-radius: 5px; 
+                                   cursor: pointer;
+                                   font-size: 16px;">
+                        🗑️ Clear All Payment Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Payments Panel -->
+            <div id="recentPanel" class="tab-panel" 
+                 style="background: white; 
+                        padding: 15px; 
+                        border-radius: 10px; 
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+                        display: none;
+                        margin-bottom: 15px;">
+                <h3 style="color: #deaa79; margin-bottom: 15px; font-size: 18px;">Recent Payments</h3>
+                <div id="recentPayments" 
+                     style="max-height: 400px; 
+                            overflow-y: auto; 
+                            -webkit-overflow-scrolling: touch;">
+                    <!-- Recent payments will be loaded here -->
+                </div>
             </div>
         </div>
-    </div>
-    <div style="text-align: center; margin: 20px;">
-        <button onclick="downloadTableAsImage()" style="background-color: #deaa79; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">
-            Download The Image of Table
-        </button>
     </div>
     <div id="receiptTemplate" style="display: none;">
         <div class="receipt">
@@ -618,22 +779,12 @@
             </div>
         </div>
     </div>
-    <div style="text-align: center; margin: 20px;">
-        <button onclick="clearAllData()" 
-                style="background-color: #ff6666; 
-                       color: white; 
-                       padding: 10px 20px; 
-                       border: none; 
-                       border-radius: 5px; 
-                       cursor: pointer;">
-            Clear All Payment Data
-        </button>
-    </div>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="whatsapp_numbers.js"></script>
     <script>
+        // Initialize Firebase first
         const firebaseConfig = {
             apiKey: "AIzaSyA5S4DiTfTfcXDe0DxFEZQDr-OxE6rW3MA",
             authDomain: "nfua-updated.firebaseapp.com",
@@ -644,8 +795,11 @@
             measurementId: "G-3BCYZ9FP2F",
             databaseURL: "https://nfua-updated-default-rtdb.asia-southeast1.firebasedatabase.app"
         };
+        
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+
+        // Add connection monitoring
         database.ref('.info/connected').on('value', (snap) => {
             if (snap.val() === true) {
                 console.log('Connected to Firebase ✅');
@@ -653,11 +807,9 @@
                 console.log('Disconnected from Firebase ❌');
             }
         });
-        database.ref().on('value', (snapshot) => {
-            console.log('Data retrieved successfully');
-        }, (error) => {
-            console.error('Database error:', error);
-        });
+
+        // Add these functions right after the Firebase initialization in your script section
+
         function saveToFirebase() {
             const table = document.getElementById("table");
             const tableData = {};
@@ -688,69 +840,55 @@
                 })
                 .catch((error) => {
                     console.error("Error saving data:", error);
-                    alert("ডেটা সেভ করতে সমস্যা হয়েছে!");
+                    alert("ডেটা সেভ করতে সমস্যা হযেছে!");
                     throw error;
                 });
         }
+
         function loadFromFirebase() {
-            const loadingIndicator = document.getElementById('loading');
-            if (loadingIndicator) loadingIndicator.style.display = 'block';
-            
             database.ref('tableData').on('value', (snapshot) => {
                 try {
                     const tableData = snapshot.val();
-                    const table = document.getElementById("table");
-                    
-                    if (!table) {
-                        console.error("Table element not found");
-                        return;
-                    }
-
                     if (tableData) {
-                        const dataArray = Object.values(tableData);
-                        
-                        dataArray.forEach((rowData) => {
-                            if (rowData && rowData.id) {
-                                const row = Array.from(table.rows).find(
-                                    row => row.cells[0]?.innerText === rowData.id
-                                );
-                                
-                                if (row) {
-                                    if (rowData.payments) {
-                                        Object.entries(rowData.payments).forEach(([month, value]) => {
-                                            const monthIndex = Array.from(table.rows[0].cells)
-                                                .findIndex(cell => cell.innerText === month);
-                                            if (monthIndex !== -1) {
-                                                row.cells[monthIndex].innerText = value || '';
-                                            }
-                                        });
+                        const table = document.getElementById("table");
+                        if (!table) {
+                            console.error("Table element not found");
+                            return;
+                        }
+
+                        if (tableData) {
+                            const dataArray = Object.values(tableData);
+                            
+                            dataArray.forEach((rowData) => {
+                                if (rowData && rowData.id) {
+                                    const row = Array.from(table.rows).find(
+                                        row => row.cells[0]?.innerText === rowData.id
+                                    );
+                                    
+                                    if (row) {
+                                        if (rowData.payments) {
+                                            Object.entries(rowData.payments).forEach(([month, value]) => {
+                                                const monthIndex = Array.from(table.rows[0].cells)
+                                                    .findIndex(cell => cell.innerText === month);
+                                                if (monthIndex !== -1) {
+                                                    row.cells[monthIndex].innerText = value || '';
+                                                }
+                                            });
+                                        }
                                     }
                                 }
-                            }
-                        });
-                        
-                        updateTotalCollection();
+                            });
+                            
+                            updateTotalCollection();
+                        }
                     }
                 } catch (error) {
                     console.error("Error processing data:", error);
-                    // Don't show alert on initial load
-                    if (error.message !== "Table element not found") {
-                        alert("Error loading data. Please refresh the page.");
-                    }
-                } finally {
-                    if (loadingIndicator) loadingIndicator.style.display = 'none';
                 }
-            }, (error) => {
-                console.error("Firebase error:", error);
-                alert("Connection error. Please check your internet connection.");
             });
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            loadFromFirebase();
-            updateArabicDate();
-            loadRecentPayments();
-        });
-        async function updateCell() {
+
+        function updateCell() {
             const id = document.getElementById("id").value;
             const month = document.getElementById("month").value;
             const value = document.getElementById("value").value;
@@ -762,12 +900,10 @@
             }
 
             try {
-                // Generate a unique receipt ID with timestamp and random number
                 const timestamp = Date.now();
                 const random = Math.floor(Math.random() * 1000);
                 const receiptId = `NFUA-${id}-${timestamp}-${random}`;
 
-                // Update table and save to Firebase
                 const table = document.getElementById("table");
                 const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
                 if (row) {
@@ -778,14 +914,12 @@
                     }
                 }
 
-                // Save payment data
-                await saveToFirebase();
+                saveToFirebase();
                 
                 const memberName = row.cells[1].innerText;
                 const date = new Date().toLocaleDateString();
 
-                // Save receipt data to Firebase
-                await database.ref(`receipts/${receiptId}`).set({
+                database.ref(`receipts/${receiptId}`).set({
                     memberId: id,
                     memberName: memberName,
                     month: month,
@@ -795,14 +929,41 @@
                     receiptId: receiptId
                 });
 
-                // Show success message
                 document.getElementById("message").innerText = "Update successful!";
                 updateTotalCollection();
 
-                // Send WhatsApp receipt if checked
                 if (shouldSendReceipt) {
                     const number = membersWhatsApp[id];
                     if (number) {
+                        // Get total paid amount for this member
+                        const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
+                        let totalPaid = 0;
+                        if (row) {
+                            for (let j = 2; j < row.cells.length; j++) {
+                                const cellValue = row.cells[j].innerText;
+                                if (!isNaN(cellValue) && cellValue !== "") {
+                                    totalPaid += parseInt(cellValue);
+                                }
+                            }
+                        }
+
+                        // Calculate due month based on current date
+                        const monthOrder = [
+                            "Romjan", "Shawal", "Jil Qad", "Jil Hazz", 
+                            "Muharrom", "Sofor", "Robiul Awwal", "Robius Sani",
+                            "Jomadal Ula", "Jomadal Akhiro", "Rojob", "Saban"
+                        ];
+                        
+                        const today = new Date();
+                        const islamicDate = today.toLocaleDateString('en-US', {
+                            calendar: 'islamic-umalqura',
+                            month: 'numeric',
+                            numberingSystem: 'latn'
+                        });
+                        
+                        const currentMonthIndex = parseInt(islamicDate.split('/')[0]) - 1;
+                        const dueMonth = monthOrder[currentMonthIndex];
+
                         const text = 
 `🧾 *NFUA Payment Receipt*
 
@@ -814,9 +975,14 @@
 💰 Amount: ৳${value}
 📆 Date: ${date}
 🔖 Receipt No: ${receiptId}
-━━━━━━━━━━━━
 
-To verify this receipt, contact admin with the Receipt No.
+*Payment Summary:*
+━━━━━━━━━━━━
+💳 Total Paid: ৳${totalPaid}
+📌 Due Month: ${dueMonth}
+
+🌐 Visit our website for more information:
+https://5fg4908503.github.io/NFUA/
 
 *Nazatians Friends Unity Association*
 Sarulia, Demra, Dhaka`;
@@ -826,59 +992,18 @@ Sarulia, Demra, Dhaka`;
                     }
                 }
 
-                // Clear input fields
                 document.getElementById("id").value = "";
                 document.getElementById("month").value = "";
                 document.getElementById("value").value = "";
                 document.getElementById("sendReceipt").checked = false;
+                updateMonthDropdown();
 
             } catch (error) {
                 console.error("Error updating data:", error);
                 alert("Update failed! Please try again.");
             }
         }
-        async function undoLast() {
-            if (lastAction) {
-                try {
-                    const { id, month, oldValue } = lastAction;
-                    
-                    // Get current data
-                    const snapshot = await database.ref('tableData').once('value');
-                    const currentData = snapshot.val();
-                    
-                    if (currentData && currentData[id]) {
-                        // Update with old value or remove if it was empty
-                        if (oldValue) {
-                            currentData[id].payments[month] = oldValue;
-                        } else {
-                            delete currentData[id].payments[month];
-                        }
-                        
-                        // Save back to Firebase
-                        await database.ref('tableData').set(currentData);
-                        
-                        // Update table display
-                        const table = document.getElementById("table");
-                        const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
-                        if (row) {
-                            const monthIndex = Array.from(table.rows[0].cells)
-                                .findIndex(cell => cell.innerText === month);
-                            if (monthIndex !== -1) {
-                                row.cells[monthIndex].innerText = oldValue || '';
-                            }
-                        }
-                        
-                        document.getElementById("message").innerText = "পূর্ববর্তী অবস্থায় ফিরে গেছে!";
-                        document.getElementById("undo").style.display = "none";
-                        lastAction = null;
-                        updateTotalCollection();
-                    }
-                } catch (error) {
-                    console.error("Error undoing action:", error);
-                    alert("পূর্ববর্তী অবস্থায় ফিরতে সমস্যা হয়েছে!");
-                }
-            }
-        }
+
         function updateTotalCollection() {
             const table = document.getElementById("table");
             let total = 0;
@@ -892,34 +1017,7 @@ Sarulia, Demra, Dhaka`;
             }
             document.getElementById('totalCollection').innerText = `৳ ${total}`;
         }
-        function updateArabicDate() {
-            const arabicMonths = {
-                0: 'Muharrom', 
-                1: 'Sofor', 
-                2: 'Robiul Awwal',
-                3: 'Robius Sani', 
-                4: 'Jomadal Ula', 
-                5: 'Jomadal Akhiro',
-                6: 'Rojob', 
-                7: 'Saban', 
-                8: 'Romjan',
-                9: 'Shawal', 
-                10: 'Jil Qad', 
-                11: 'Jil Hazz'
-            };
-            const today = new Date();
-            const options = {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
-            const dateStr = today.toLocaleDateString('ar-SA', options);
-            const currentMonth = arabicMonths[today.getMonth()];
-            document.getElementById("currentDate").innerHTML = `
-                <div>${currentMonth}</div>
-                <div>${dateStr}</div>
-            `;
-        }
+
         function downloadTableAsImage() {
             const table = document.getElementById('table');
             const message = document.getElementById("message");
@@ -946,66 +1044,46 @@ Sarulia, Demra, Dhaka`;
             })
             .catch(function(error) {
                 console.error('Error:', error);
-                message.innerText = "ছবি তৈরি করতে সমস্যা হয়েছে!";
+                message.innerText = "বি তৈরি করতে সমস্যা হয়েছে!";
             });
         }
-        // Add this function to verify a receipt
-        async function verifyReceipt(receiptId) {
-            try {
-                const snapshot = await database.ref(`receipts/${receiptId}`).once('value');
-                const receipt = snapshot.val();
-                if (receipt) {
-                    return `✅ Valid Receipt\n\nDetails:\nID: ${receipt.memberId}\nName: ${receipt.memberName}\nMonth: ${receipt.month}\nAmount: ৳${receipt.amount}\nDate: ${receipt.date}`;
-                }
-                return "❌ Invalid Receipt";
-            } catch (error) {
-                console.error("Error verifying receipt:", error);
-                return "Error verifying receipt";
-            }
-        }
-        async function checkReceipt() {
-            const receiptId = document.getElementById('receiptId').value;
-            if (!receiptId) {
-                alert('Please enter a receipt number');
-                return;
-            }
 
-            const resultDiv = document.getElementById('verificationResult');
-            try {
-                const snapshot = await database.ref(`receipts/${receiptId}`).once('value');
-                const receipt = snapshot.val();
-                
-                if (receipt) {
-                    resultDiv.style.backgroundColor = '#e8f5e9';
-                    resultDiv.innerHTML = `
-                        <h4 style="color: #2e7d32; margin: 0;">✅ Valid Receipt</h4>
-                        <div style="margin-top: 10px;">
-                            <p><strong>Receipt ID:</strong> ${receipt.receiptId}</p>
-                            <p><strong>Member ID:</strong> ${receipt.memberId}</p>
-                            <p><strong>Name:</strong> ${receipt.memberName}</p>
-                            <p><strong>Month:</strong> ${receipt.month}</p>
-                            <p><strong>Amount:</strong> ৳${receipt.amount}</p>
-                            <p><strong>Date:</strong> ${receipt.date}</p>
-                        </div>
-                    `;
-                } else {
-                    resultDiv.style.backgroundColor = '#ffebee';
-                    resultDiv.innerHTML = `
-                        <h4 style="color: #c62828; margin: 0;">❌ Invalid Receipt</h4>
-                        <p style="margin-top: 10px;">This receipt number was not found in our records.</p>
-                    `;
+        function clearAllData() {
+            const confirmClear = confirm("⚠️ Warning: This will delete ALL payment data and receipts. This action cannot be undone. Are you sure?");
+            if (confirmClear) {
+                const secondConfirm = confirm("Are you absolutely sure? All payment records will be permanently deleted.");
+                if (secondConfirm) {
+                    try {
+                        database.ref('tableData').remove();
+                        database.ref('receipts').remove();
+                        
+                        const table = document.getElementById("table");
+                        for (let i = 1; i < table.rows.length; i++) {
+                            const row = table.rows[i];
+                            for (let j = 2; j < row.cells.length; j++) {
+                                row.cells[j].innerText = '';
+                            }
+                        }
+                        
+                        document.getElementById('totalCollection').innerText = '৳ 0';
+                        alert("All payment data has been cleared successfully!");
+                        document.getElementById('recentPayments').innerHTML = '';
+                        
+                    } catch (error) {
+                        console.error("Error clearing data:", error);
+                        alert("Error clearing data. Please try again.");
+                    }
                 }
-                resultDiv.style.display = 'block';
-            } catch (error) {
-                console.error('Error verifying receipt:', error);
-                resultDiv.style.backgroundColor = '#ffebee';
-                resultDiv.innerHTML = `
-                    <h4 style="color: #c62828; margin: 0;">❌ Error</h4>
-                    <p style="margin-top: 10px;">An error occurred while verifying the receipt. Please try again.</p>
-                `;
-                resultDiv.style.display = 'block';
             }
         }
+
+        // Add event listener for DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromFirebase();
+            updateArabicDate();
+            loadRecentPayments();
+            updateTotalCollection();
+        });
 
         function loadRecentPayments() {
             const recentPaymentsDiv = document.getElementById('recentPayments');
@@ -1033,41 +1111,206 @@ Sarulia, Demra, Dhaka`;
                 `).join('');
             });
         }
-        function clearAllData() {
-            const confirmClear = confirm("⚠️ Warning: This will delete ALL payment data and receipts. This action cannot be undone. Are you sure?");
-            if (confirmClear) {
-                const secondConfirm = confirm("Are you absolutely sure? All payment records will be permanently deleted.");
-                if (secondConfirm) {
-                    try {
-                        // Clear tableData
-                        database.ref('tableData').remove();
-                        // Clear receipts
-                        database.ref('receipts').remove();
-                        
-                        // Clear table cells
-                        const table = document.getElementById("table");
-                        for (let i = 1; i < table.rows.length; i++) {
-                            const row = table.rows[i];
-                            for (let j = 2; j < row.cells.length; j++) {
-                                row.cells[j].innerText = '';
-                            }
-                        }
-                        
-                        // Update total
-                        document.getElementById('totalCollection').innerText = '৳ 0';
-                        
-                        alert("All payment data has been cleared successfully!");
-                        
-                        // Clear recent payments display
-                        document.getElementById('recentPayments').innerHTML = '';
-                        
-                    } catch (error) {
-                        console.error("Error clearing data:", error);
-                        alert("Error clearing data. Please try again.");
-                    }
-                }
+
+        function updateArabicDate() {
+            const today = new Date();
+            const islamicMonths = [
+                "Muharrom", "Sofor", "Robiul Awwal", "Robius Sani",
+                "Jomadal Ula", "Jomadal Akhiro", "Rojob", "Saban",
+                "Romjan", "Shawal", "Jil Qad", "Jil Hazz"
+            ];
+            
+            try {
+                const islamicDate = today.toLocaleDateString('en-US', {
+                    calendar: 'islamic-umalqura',
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                    numberingSystem: 'latn'
+                }).replace(' AH', '').replace('B', '').replace(/\s+/g, ' ').trim();
+                
+                // Parse the date parts
+                const [month, day, year] = islamicDate.split('/');
+                const monthIndex = parseInt(month) - 1;
+                const currentMonth = islamicMonths[monthIndex];
+                
+                const formattedDate = `${currentMonth} ${day}, ${year.replace(/[^0-9]/g, '')} AH`;
+                
+                document.getElementById("currentDate").innerHTML = `
+                    <div style="font-size: 1.2em;">${formattedDate}</div>
+                `;
+            } catch (error) {
+                console.error('Error formatting Islamic date:', error);
+                // Fallback to regular date if there's an error
+                const dateStr = today.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById("currentDate").innerHTML = `
+                    <div style="font-size: 1.2em;">${dateStr}</div>
+                `;
             }
         }
+
+        // Add this new function to check paid months
+        function updateMonthDropdown() {
+            const id = document.getElementById("id").value;
+            const monthSelect = document.getElementById("month");
+            
+            // Reset all options to enabled first
+            Array.from(monthSelect.options).forEach(option => {
+                option.disabled = false;
+            });
+
+            if (!id) return; // If no ID selected, keep all months enabled
+
+            const table = document.getElementById("table");
+            const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
+            
+            if (row) {
+                // Check each month in the row
+                Array.from(row.cells).forEach((cell, index) => {
+                    if (index >= 2) { // Skip ID and Name columns
+                        const monthName = table.rows[0].cells[index].innerText;
+                        const value = cell.innerText.trim();
+                        
+                        // If there's a payment value, disable that month in dropdown
+                        if (value) {
+                            const option = Array.from(monthSelect.options).find(opt => opt.value === monthName);
+                            if (option) {
+                                option.disabled = true;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Add event listener to ID input
+        document.getElementById("id").addEventListener('change', updateMonthDropdown);
+
+        // Add this function after your existing functions
+
+        function sendDueReminders() {
+            // Get current Islamic date and month
+            const today = new Date();
+            const islamicDate = today.toLocaleDateString('en-US', {
+                calendar: 'islamic-umalqura',
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                numberingSystem: 'latn'
+            });
+            
+            // Get actual Hijri month index (1-12)
+            const currentMonthIndex = parseInt(islamicDate.split('/')[0]) - 1;
+            
+            // Our display months in table order (starting from Ramadan)
+            const tableMonths = [
+                "Romjan", "Shawal", "Jil Qad", "Jil Hazz", 
+                "Muharrom", "Sofor", "Robiul Awwal", "Robius Sani",
+                "Jomadal Ula", "Jomadal Akhiro", "Rojob", "Saban"
+            ];
+
+            // Convert Hijri month index to our table month index
+            // Muharram (index 0) is at position 4 in our table
+            const tableMonthIndex = (currentMonthIndex + 4) % 12;
+            const currentMonth = tableMonths[tableMonthIndex];
+
+            // Get all members who haven't paid
+            const table = document.getElementById("table");
+            const unpaidMembers = [];
+
+            for (let i = 1; i < table.rows.length; i++) {
+                const row = table.rows[i];
+                const memberId = row.cells[0].innerText;
+                const memberName = row.cells[1].innerText;
+                const dueMonths = [];
+                let totalPaid = 0;
+
+                // Check payments up to current month in table order
+                for (let j = 2; j < row.cells.length; j++) {
+                    const monthName = table.rows[0].cells[j].innerText;
+                    const monthIndex = tableMonths.indexOf(monthName);
+                    const cellValue = row.cells[j].innerText.trim();
+                    
+                    // Check if this month should be included in dues check
+                    // Compare month positions relative to current month
+                    if (monthIndex <= tableMonthIndex) {
+                        if (cellValue && !isNaN(cellValue)) {
+                            totalPaid += parseInt(cellValue);
+                        } else {
+                            dueMonths.push(monthName);
+                        }
+                    }
+                }
+
+                // Only add members who have dues
+                if (dueMonths.length > 0) {
+                    unpaidMembers.push({
+                        id: memberId,
+                        name: memberName,
+                        dueMonths: dueMonths,
+                        totalPaid: totalPaid,
+                        contact: membersWhatsApp[memberId]
+                    });
+                }
+            }
+
+            if (unpaidMembers.length === 0) {
+                alert(`No due payments found up to ${currentMonth}! 🎉`);
+                return;
+            }
+
+            // Create reminder message
+            const reminderMessage = 
+`*NFUA Payment Due Reminder* ⚠️
+Date: ${islamicDate.replace(/\//g, '-')}
+
+${unpaidMembers.map(member => 
+`━━━━━━━━━━━━
+👤 ${member.name}
+🆔 ID: ${member.id}
+📅 Due: ${member.dueMonths.join(', ')}
+💰 Paid: ৳${member.totalPaid}
+📱 Contact: ${member.contact}`
+).join('\n\n')}
+
+━━━━━━━━━━━━
+🌐 Visit: https://5fg4908503.github.io/NFUA/
+
+*Nazatians Friends Unity Association*
+Sarulia, Demra, Dhaka`;
+
+            // Send to admin (ID: 113)
+            const adminNumber = membersWhatsApp['113'];
+            if (adminNumber) {
+                window.open(`https://wa.me/${adminNumber.replace(/\+/g, '')}?text=${encodeURIComponent(reminderMessage)}`);
+            }
+        }
+
+        // Add this JavaScript for tab functionality
+        function showTab(tabName) {
+            // Hide all panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.style.display = 'none';
+            });
+            
+            // Reset all tab buttons
+            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
+                tab.style.backgroundColor = '#deaa79';
+            });
+            
+            // Show selected panel and highlight its tab
+            document.getElementById(`${tabName}Panel`).style.display = 'block';
+            document.getElementById(`${tabName}Tab`).style.backgroundColor = '#c78a57';
+        }
+
+        // Show first tab by default when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('receipts');
+        });
     </script>
 </body>
 </html>
