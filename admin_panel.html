@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Admin Panel - Nazatians Friends Unity Association</title>
+    <link rel="icon" type="image/png" href="site logo.png">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -287,6 +288,161 @@
             
             .tab-panel {
                 padding: 12px !important;
+            }
+        }
+
+        /* Mobile-friendly styles */
+        @media screen and (max-width: 768px) {
+            /* Form layout */
+            form {
+                flex-direction: column;
+                padding: 10px;
+                width: 95%;
+                margin: 10px auto;
+            }
+
+            form .calendar,
+            form .total {
+                width: 100%;
+                margin: 5px 0;
+                min-height: 100px;
+            }
+
+            /* Input fields */
+            form input, 
+            form select, 
+            form button {
+                width: 100%;
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 12px;
+                margin: 5px 0;
+            }
+
+            /* Table adjustments */
+            table {
+                width: 100%;
+                margin: 10px 0;
+                font-size: 14px;
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            th, td {
+                padding: 8px 4px;
+                white-space: nowrap;
+            }
+
+            /* Fixed columns for ID and Name */
+            table th:nth-child(1),
+            table td:nth-child(1),
+            table th:nth-child(2),
+            table td:nth-child(2) {
+                position: sticky;
+                left: 0;
+                background: inherit;
+                z-index: 1;
+            }
+
+            table td:nth-child(2) {
+                border-right: 2px solid #deaa79;
+            }
+
+            /* Headers */
+            h1 {
+                font-size: 1.5em;
+                padding: 10px;
+                margin-top: 50px;
+            }
+
+            h2 {
+                font-size: 1.3em;
+                padding: 8px;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                padding: 6px;
+            }
+
+            /* Home button */
+            .home-btn {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 100;
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            /* Message display */
+            .message {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255, 255, 255, 0.9);
+                padding: 10px 20px;
+                border-radius: 20px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                z-index: 1000;
+            }
+
+            /* Recent payments panel */
+            #recentPayments {
+                max-height: 300px;
+            }
+
+            /* Receipt verification panel */
+            #verificationResult {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            /* Admin actions buttons */
+            #actionsPanel button {
+                margin: 5px 0;
+                width: 100%;
+            }
+
+            /* Touch-friendly tooltips */
+            .tooltip .tooltip-text {
+                width: 80%;
+                left: 10%;
+                transform: none;
+            }
+        }
+
+        /* Additional improvements for very small screens */
+        @media screen and (max-width: 360px) {
+            table {
+                font-size: 12px;
+            }
+
+            form input, 
+            form select, 
+            form button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .home-btn {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Improve touch targets */
+        @media (hover: none) {
+            button, 
+            input[type="submit"],
+            select {
+                min-height: 44px;
+            }
+
+            input[type="number"],
+            input[type="text"] {
+                min-height: 40px;
             }
         }
     </style>
@@ -762,7 +918,7 @@
     </div>
     <div id="receiptTemplate" style="display: none;">
         <div class="receipt">
-            <img src="https://i.ibb.co.com/WFkY2ff/a-creative-and-inspiring-logo-design-featuring-a-s-U93-XQD8y-SKa2a-Hmueuiffw-y-Bga-Dn-L6-QXCNqz-UCur.png" 
+            <img src="site logo.png" 
                  alt="NFUA Logo" 
                  style="width: 80px; margin: 0 auto; display: block;">
             <h3 style="text-align: center; margin: 10px 0;">Payment Receipt</h3>
@@ -935,25 +1091,12 @@
                 if (shouldSendReceipt) {
                     const number = membersWhatsApp[id];
                     if (number) {
-                        // Get total paid amount for this member
+                        // Get total paid amount and find last paid month
                         const row = Array.from(table.rows).find(row => row.cells[0]?.innerText === id);
                         let totalPaid = 0;
-                        if (row) {
-                            for (let j = 2; j < row.cells.length; j++) {
-                                const cellValue = row.cells[j].innerText;
-                                if (!isNaN(cellValue) && cellValue !== "") {
-                                    totalPaid += parseInt(cellValue);
-                                }
-                            }
-                        }
+                        let dueMonths = [];
 
-                        // Calculate due month based on current date
-                        const monthOrder = [
-                            "Romjan", "Shawal", "Jil Qad", "Jil Hazz", 
-                            "Muharrom", "Sofor", "Robiul Awwal", "Robius Sani",
-                            "Jomadal Ula", "Jomadal Akhiro", "Rojob", "Saban"
-                        ];
-                        
+                        // Get current Islamic month
                         const today = new Date();
                         const islamicDate = today.toLocaleDateString('en-US', {
                             calendar: 'islamic-umalqura',
@@ -962,7 +1105,28 @@
                         });
                         
                         const currentMonthIndex = parseInt(islamicDate.split('/')[0]) - 1;
-                        const dueMonth = monthOrder[currentMonthIndex];
+                        
+                        // Our month order
+                        const islamicMonths = [
+                            "Muharrom", "Sofor", "Robiul Awwal", "Robius Sani",
+                            "Jomadal Ula", "Jomadal Akhiro", "Rojob", "Saban",
+                            "Romjan", "Shawal", "Jil Qad", "Jil Hazz"
+                        ];
+
+                        if (row) {
+                            // Calculate total paid and find due months
+                            for (let j = 2; j < row.cells.length; j++) {
+                                const monthName = table.rows[0].cells[j].innerText;
+                                const monthIndex = islamicMonths.indexOf(monthName);
+                                const cellValue = row.cells[j].innerText.trim();
+                                
+                                if (cellValue && !isNaN(cellValue)) {
+                                    totalPaid += parseInt(cellValue);
+                                } else if (monthIndex <= currentMonthIndex) {
+                                    dueMonths.push(monthName);
+                                }
+                            }
+                        }
 
                         const text = 
 `🧾 *NFUA Payment Receipt*
@@ -979,7 +1143,7 @@
 *Payment Summary:*
 ━━━━━━━━━━━━
 💳 Total Paid: ৳${totalPaid}
-📌 Due Month: ${dueMonth}
+📌 Due: ${dueMonths.length > 0 ? dueMonths.join(', ') : 'No dues'}
 
 🌐 Visit our website for more information:
 https://5fg4908503.github.io/NFUA/
