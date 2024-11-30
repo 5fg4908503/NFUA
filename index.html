@@ -584,27 +584,44 @@
         }
 
         function updateArabicDate() {
-            const arabicMonths = {
-                0: 'Muharrom', 1: 'Sofor', 2: 'Robiul Awwal',
-                3: 'Robius Sani', 4: 'Jomadal Ula', 5: 'Jomadal Akhiro',
-                6: 'Rojob', 7: 'Saban', 8: 'Romjan',
-                9: 'Shawal', 10: 'Jil Qad', 11: 'Jil Hazz'
-            };
-
             const today = new Date();
-            const options = {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            };
-
-            const dateStr = today.toLocaleDateString('ar-SA', options);
-            const currentMonth = arabicMonths[today.getMonth()];
-
-            document.getElementById("currentDate").innerHTML = `
-                <div>${currentMonth}</div>
-                <div>${dateStr}</div>
-            `;
+            const islamicMonths = [
+                "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani",
+                "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Shaban",
+                "Ramadan", "Shawwal", "Dhu al-Qadah", "Dhu al-Hijjah"
+            ];
+            
+            try {
+                const islamicDate = today.toLocaleDateString('en-US', {
+                    calendar: 'islamic-umalqura',
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                    numberingSystem: 'latn'
+                }).replace(' AH', '').replace('B', '').replace(/\s+/g, ' ').trim();
+                
+                // Parse the date parts
+                const [month, day, year] = islamicDate.split('/');
+                const monthIndex = parseInt(month) - 1;
+                const islamicMonth = islamicMonths[monthIndex];
+                
+                const formattedDate = `${islamicMonth} ${day}, ${year.replace(/[^0-9]/g, '')} AH`;
+                
+                document.getElementById("currentDate").innerHTML = `
+                    <div style="font-size: 1.2em;">${formattedDate}</div>
+                `;
+            } catch (error) {
+                console.error('Error formatting Islamic date:', error);
+                // Fallback to regular date if there's an error
+                const dateStr = today.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById("currentDate").innerHTML = `
+                    <div style="font-size: 1.2em;">${dateStr}</div>
+                `;
+            }
         }
 
         function loadFromFirebase() {
