@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nazatians Friends Unity Association</title>
     <link rel="icon" type="image/png" href="site logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -225,6 +226,38 @@
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        /* Add new footer styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #f4f4f4;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .footer i {
+            margin-right: 5px;
+            color: #deaa79;
+        }
+
+        @media screen and (max-width: 768px) {
+            .footer .social-links a {
+                font-size: 18px;
+                margin: 0 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -232,10 +265,6 @@
         <img src="site logo.png" 
              alt="NFUA Logo" 
              style="max-width: 150px; border-radius: 10px; margin: 10px auto;">
-    </div>
-
-    <div class="login-container">
-        <button class="login-btn" onclick="showLoginModal()">Admin Login</button>
     </div>
 
     <div id="loginModal" class="modal">
@@ -739,5 +768,12 @@
             }
         });
     </script>
+    <!-- Add this before closing body tag -->
+    <footer class="footer">
+        <img src="logo vector.svg" alt="Hobby Studio Logo">
+        <p><i class="fas fa-laptop-code"></i> Developed by: Hobby Studio</p>
+        <p><i class="fas fa-code"></i> Developer: Abdur Rahman</p>
+        <p><i class="fas fa-user-shield"></i> <a href="#" onclick="showLoginModal()" style="color: #666; text-decoration: none;">Admin</a></p>
+    </footer>
 </body>
 </html>
