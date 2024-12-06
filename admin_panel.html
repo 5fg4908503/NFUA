@@ -6,6 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Admin Panel - Nazatians Friends Unity Association</title>
     <link rel="icon" type="image/png" href="site logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -445,21 +446,39 @@
                 min-height: 40px;
             }
         }
+
+        /* Add new footer styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #f4f4f4;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        @media screen and (max-width: 768px) {
+            .footer {
+                padding: 15px;
+            }
+            
+            .footer img {
+                width: 80px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div style="position: absolute; top: 20px; left: 20px;">
-        <button onclick="window.location.href='index.html'" 
-                style="background-color: #deaa79; 
-                       color: white; 
-                       padding: 10px 20px; 
-                       border: none; 
-                       border-radius: 5px; 
-                       cursor: pointer; 
-                       font-size: 1em;">
-            ← Home Page
-        </button>
-    </div>
     <h1>Nazatians Friends Unity Association</h1>
     <h3>Sarulia, Demra, Dhaka 1361</h3>
     <h2>Monthly Payment Details</h2>
@@ -996,7 +1015,7 @@
                 })
                 .catch((error) => {
                     console.error("Error saving data:", error);
-                    alert("ডেটা সেভ করতে সমস্যা হযেছে!");
+                    alert("ডেটা সভ করতে সমস্যা হযেছে!");
                     throw error;
                 });
         }
@@ -1146,7 +1165,7 @@
 📌 Due: ${dueMonths.length > 0 ? dueMonths.join(', ') : 'No dues'}
 
 🌐 Visit our website for more information:
-https://5fg4908503.github.io/NFUA/
+https://nfua.netlify.app/
 
 *Nazatians Friends Unity Association*
 Sarulia, Demra, Dhaka`;
@@ -1186,29 +1205,70 @@ Sarulia, Demra, Dhaka`;
             const table = document.getElementById('table');
             const message = document.getElementById("message");
             message.innerText = "ছবি তৈরি হচ্ছে...";
+
+            // Store original styles
+            const originalStyles = {
+                width: table.style.width,
+                display: table.style.display,
+                overflow: table.style.overflow,
+                position: table.style.position
+            };
+
+            // Temporarily modify table for capture
+            table.style.width = 'auto';
+            table.style.display = 'table';
+            table.style.overflow = 'visible';
+            table.style.position = 'relative';
+
             html2canvas(table, {
                 scale: 2,
                 backgroundColor: '#ffffff',
                 logging: false,
-                useCORS: true
+                useCORS: true,
+                windowWidth: table.scrollWidth * 2,
+                width: table.scrollWidth
             }).then(function(canvas) {
-                const image = canvas.toDataURL("image/jpeg", 1.0);
-                const downloadLink = document.createElement('a');
-                downloadLink.href = image;
-                const date = new Date();
-                const filename = `NFUA_Table_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.jpg`;
-                downloadLink.download = filename;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                message.innerText = "ছবি ডাউনলোড হয়েছে!";
-                setTimeout(() => {
-                    message.innerText = "";
-                }, 3000);
+                // Restore original styles
+                table.style.width = originalStyles.width;
+                table.style.display = originalStyles.display;
+                table.style.overflow = originalStyles.overflow;
+                table.style.position = originalStyles.position;
+
+                // Create blob from canvas
+                canvas.toBlob(function(blob) {
+                    // Create object URL
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Create download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = url;
+                    const date = new Date();
+                    const filename = `NFUA_Table_${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}.jpg`;
+                    downloadLink.download = filename;
+                    
+                    // Append, click, and cleanup
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    
+                    // Revoke object URL
+                    setTimeout(() => URL.revokeObjectURL(url), 5000);
+                    
+                    message.innerText = "ছবি ডাউনলোড হয়েছে!";
+                    setTimeout(() => {
+                        message.innerText = "";
+                    }, 3000);
+                }, 'image/jpeg', 1.0);
             })
             .catch(function(error) {
+                // Restore original styles even if there's an error
+                table.style.width = originalStyles.width;
+                table.style.display = originalStyles.display;
+                table.style.overflow = originalStyles.overflow;
+                table.style.position = originalStyles.position;
+
                 console.error('Error:', error);
-                message.innerText = "বি তৈরি করতে সমস্যা হয়েছে!";
+                message.innerText = "ছবি তৈরি করতে সমস্যা হ��়েছে!";
             });
         }
 
@@ -1442,7 +1502,7 @@ ${unpaidMembers.map(member =>
 ).join('\n\n')}
 
 ━━━━━━━━━━━━
-🌐 Visit: https://5fg4908503.github.io/NFUA/
+🌐 Visit: https://nfua.netlify.app/
 
 *Nazatians Friends Unity Association*
 Sarulia, Demra, Dhaka`;
@@ -1476,6 +1536,22 @@ Sarulia, Demra, Dhaka`;
             showTab('receipts');
         });
     </script>
+    <footer class="footer">
+        <img src="logo vector.svg" alt="Hobby Studio Logo">
+        <p><i class="fas fa-laptop-code"></i> Developed by: Hobby Studio</p>
+        <p><i class="fas fa-code"></i> Developer: Abdur Rahman</p>
+        <button onclick="window.location.href='index.html'" 
+                style="background-color: #deaa79; 
+                       color: white; 
+                       padding: 10px 20px; 
+                       border: none; 
+                       border-radius: 5px; 
+                       cursor: pointer; 
+                       font-size: 1em;
+                       margin-top: 10px;">
+            ← Home Page
+        </button>
+    </footer>
 </body>
 </html>
 
